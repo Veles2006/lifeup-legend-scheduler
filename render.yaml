@@ -4,10 +4,10 @@ services:
     env: python
     plan: starter
     buildCommand: "pip install -r requirements.txt"
-    
-    # 🟦 Chạy mỗi 10 phút
-    cronSchedule: "*/10 * * * *"
+
+    cronSchedule: "0 4,11,23 * * *"
 
     startCommand: "python scheduler.py"
     environment:
       pythonVersion: 3.11.6
+
