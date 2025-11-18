@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pymongo import MongoClient
 import certifi
+import random
+
 
 # Load ENV
 load_dotenv()
@@ -25,15 +27,20 @@ openai_client = OpenAI(api_key=OPENAI_KEY)
 
 TG_SEND_MESSAGE = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
+# Random ra một nhiệm vụ để làm
+
+choice = random.choice(["lập trình", "tiếng anh", "tiếng trung"])
+
+
 
 # ---------------------------
 # 1. Tạo nhiệm vụ bằng GPT
 # ---------------------------
 def generate_daily_task():
-    prompt = """
-    Hãy tạo nhiệm vụ phát triển bản thân hôm nay.
+    prompt = f"""
+    Hãy tạo nhiệm vụ học "{choice}" hôm nay.
     Trả về dạng JSON:
-    {
+    {{
         "name": "",
         "short_desc": "",
         "full_desc": "",
@@ -41,7 +48,7 @@ def generate_daily_task():
         "reward": "",
         "penalty": "",
         "deadline": ""
-    }
+    }}
     """
     res = openai_client.chat.completions.create(
         model="gpt-4o-mini",
@@ -86,7 +93,7 @@ def send_to_telegram(task):
         f"📘 <b>Xếp loại:</b> Hàng ngày\n"
         f"📝 <b>Mô tả:</b> {task['short_desc']}\n"
         f"⏰ <b>Hạn:</b> {task['deadline']}\n"
-        f"🔗 <b>Xem chi tiết:</b> https://lifeup-legend.vercel.app/tasks"
+        f"🔗 <b>Xem chi tiết:</b> https://www.lifeuplegend.com/tasks"
     )
 
     requests.post(TG_SEND_MESSAGE, json={
